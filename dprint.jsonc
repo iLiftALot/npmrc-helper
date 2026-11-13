@@ -1,0 +1,4 @@
+{
+    "extends": "/Users/nicholascorbin/.config/dprint/base.jsonc",
+    "includes": ["*.{json,jsonc,js,mjs,cjs,ts,mts,cts}", "src/**/*.ts", "test/**/*.ts"]
+}

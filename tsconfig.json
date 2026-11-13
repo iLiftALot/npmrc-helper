@@ -1,15 +1,28 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2020",
-    "lib": ["ES2020"],
-    "outDir": "./out",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "sourceMap": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", ".vscode-test", "out"]
+    "compilerOptions": {
+        "module": "node16",
+        "moduleResolution": "node16",
+        "target": "esnext",
+        "lib": [
+            "ES2020"
+        ],
+        "outDir": "./out",
+        "rootDir": "./src",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "sourceMap": true,
+        "allowArbitraryExtensions": true,
+        "maxNodeModuleJsDepth": 5,
+        "allowJs": true,
+        "strictNullChecks": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        ".vscode-test",
+        "out"
+    ]
 }

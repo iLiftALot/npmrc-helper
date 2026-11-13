@@ -1,8 +1,18 @@
 {
-  "comments": {
-    "lineComment": "#"
-  },
-  "brackets": [],
-  "autoClosingPairs": [],
-  "surroundingPairs": []
+    "comments": {
+        "lineComment": {
+            "comment": "#"
+        },
+        "blockComment": ["#=", "=#"]
+    },
+    "brackets": [],
+    "autoClosingPairs": [],
+    "surroundingPairs": [],
+    "folding": {
+        "markers": {
+            "start": "^\\s*#region\\b",
+            "end": "^\\s*#endregion\\b"
+        }
+    },
+    "indentationRules": {}
 }

@@ -1,124 +1,118 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+
 import {
-  NpmrcHoverProvider,
-  NpmrcCompletionProvider,
-  NpmrcDiagnosticsProvider,
-} from './providers';
-import {
-  YarnrcHoverProvider,
-  YarnrcCompletionProvider,
-  YarnrcDiagnosticsProvider,
-} from './yarnProviders';
-import {
-  PnpmWorkspaceHoverProvider,
-  PnpmWorkspaceCompletionProvider,
-  PnpmWorkspaceDiagnosticsProvider,
-} from './pnpmWorkspaceProviders';
+    PnpmWorkspaceCompletionProvider,
+    PnpmWorkspaceDiagnosticsProvider,
+    PnpmWorkspaceHoverProvider
+} from "./pnpmWorkspaceProviders";
+import { NpmrcCompletionProvider, NpmrcDiagnosticsProvider, NpmrcHoverProvider } from "./providers";
+import { YarnrcCompletionProvider, YarnrcDiagnosticsProvider, YarnrcHoverProvider } from "./yarnProviders";
+
 
 export function activate(context: vscode.ExtensionContext): void {
-  console.log('[npmrc-helper] Extension activated');
+    console.log("[npmrc-helper] Extension activated");
 
-  // ── .npmrc (npm & pnpm sensitive auth/registry/proxy/SSL) ─────────────────
+    // ── .npmrc (npm & pnpm sensitive auth/registry/proxy/SSL) ─────────────────
 
-  const npmrcDiagnostics = new NpmrcDiagnosticsProvider();
+    const npmrcDiagnostics = new NpmrcDiagnosticsProvider();
 
-  const npmrcHover = vscode.languages.registerHoverProvider(
-    { language: 'npmrc' },
-    new NpmrcHoverProvider()
-  );
+    const npmrcHover = vscode.languages.registerHoverProvider(
+        { language: "npmrc" },
+        new NpmrcHoverProvider()
+    );
 
-  const npmrcCompletion = vscode.languages.registerCompletionItemProvider(
-    { language: 'npmrc' },
-    new NpmrcCompletionProvider(),
-    '=' // trigger on `=` for value completions
-  );
+    const npmrcCompletion = vscode.languages.registerCompletionItemProvider(
+        { language: "npmrc" },
+        new NpmrcCompletionProvider(),
+        "=" // trigger on `=` for value completions
+    );
 
-  // ── .yarnrc.yml (Yarn Berry) ──────────────────────────────────────────────
+    // ── .yarnrc.yml (Yarn Berry) ──────────────────────────────────────────────
 
-  const yarnrcDiagnostics = new YarnrcDiagnosticsProvider();
+    const yarnrcDiagnostics = new YarnrcDiagnosticsProvider();
 
-  const yarnrcHover = vscode.languages.registerHoverProvider(
-    { language: 'yarnrc' },
-    new YarnrcHoverProvider()
-  );
+    const yarnrcHover = vscode.languages.registerHoverProvider(
+        { language: "yarnrc" },
+        new YarnrcHoverProvider()
+    );
 
-  const yarnrcCompletion = vscode.languages.registerCompletionItemProvider(
-    { language: 'yarnrc' },
-    new YarnrcCompletionProvider(),
-    ':' // trigger on `:` for value completions
-  );
+    const yarnrcCompletion = vscode.languages.registerCompletionItemProvider(
+        { language: "yarnrc" },
+        new YarnrcCompletionProvider(),
+        ":" // trigger on `:` for value completions
+    );
 
-  // ── pnpm-workspace.yaml (pnpm v11+ non-sensitive settings & workspace) ────
+    // ── pnpm-workspace.yaml (pnpm v11+ non-sensitive settings & workspace) ────
 
-  const pnpmWorkspaceDiagnostics = new PnpmWorkspaceDiagnosticsProvider();
+    const pnpmWorkspaceDiagnostics = new PnpmWorkspaceDiagnosticsProvider();
 
-  // Register against both our custom language id and the built-in `yaml`
-  // language id (the file may be associated to either, depending on whether
-  // the user has the YAML extension installed).
-  const pnpmWorkspaceSelectors: vscode.DocumentSelector = [
-    { language: 'pnpm-workspace' },
-    { language: 'yaml', pattern: '**/pnpm-workspace.{yml,yaml}' },
-  ];
+    // Register against both our custom language id and the built-in `yaml`
+    // language id (the file may be associated to either, depending on whether
+    // the user has the YAML extension installed).
+    const pnpmWorkspaceSelectors: vscode.DocumentSelector = [
+        { language: "pnpm-workspace" },
+        { language: "yaml", pattern: "**/pnpm-workspace.{yml,yaml}" }
+    ];
 
-  const pnpmWorkspaceHover = vscode.languages.registerHoverProvider(
-    pnpmWorkspaceSelectors,
-    new PnpmWorkspaceHoverProvider()
-  );
+    const pnpmWorkspaceHover = vscode.languages.registerHoverProvider(
+        pnpmWorkspaceSelectors,
+        new PnpmWorkspaceHoverProvider()
+    );
 
-  const pnpmWorkspaceCompletion = vscode.languages.registerCompletionItemProvider(
-    pnpmWorkspaceSelectors,
-    new PnpmWorkspaceCompletionProvider(),
-    ':' // trigger on `:` for value completions
-  );
+    const pnpmWorkspaceCompletion = vscode.languages.registerCompletionItemProvider(
+        pnpmWorkspaceSelectors,
+        new PnpmWorkspaceCompletionProvider(),
+        ":" // trigger on `:` for value completions
+    );
 
-  // ── Diagnostics: run on open / change / close ─────────────────────────────
+    // ── Diagnostics: run on open / change / close ─────────────────────────────
 
-  const refreshAll = (doc: vscode.TextDocument): void => {
-    npmrcDiagnostics.updateDiagnostics(doc);
-    yarnrcDiagnostics.updateDiagnostics(doc);
-    pnpmWorkspaceDiagnostics.updateDiagnostics(doc);
-  };
+    const refreshAll = (doc: vscode.TextDocument): void => {
+        npmrcDiagnostics.updateDiagnostics(doc);
+        yarnrcDiagnostics.updateDiagnostics(doc);
+        pnpmWorkspaceDiagnostics.updateDiagnostics(doc);
+    };
 
-  if (vscode.window.activeTextEditor) {
-    refreshAll(vscode.window.activeTextEditor.document);
-  }
+    if (vscode.window.activeTextEditor) {
+        refreshAll(vscode.window.activeTextEditor.document);
+    }
 
-  const onDidOpen = vscode.workspace.onDidOpenTextDocument((doc) => {
-    refreshAll(doc);
-  });
+    const onDidOpen = vscode.workspace.onDidOpenTextDocument((doc) => {
+        refreshAll(doc);
+    });
 
-  const onDidChange = vscode.workspace.onDidChangeTextDocument((event) => {
-    refreshAll(event.document);
-  });
+    const onDidChange = vscode.workspace.onDidChangeTextDocument((event) => {
+        refreshAll(event.document);
+    });
 
-  const onDidClose = vscode.workspace.onDidCloseTextDocument((doc) => {
-    npmrcDiagnostics.clearDiagnostics(doc);
-    yarnrcDiagnostics.clearDiagnostics(doc);
-    pnpmWorkspaceDiagnostics.clearDiagnostics(doc);
-  });
+    const onDidClose = vscode.workspace.onDidCloseTextDocument((doc) => {
+        npmrcDiagnostics.clearDiagnostics(doc);
+        yarnrcDiagnostics.clearDiagnostics(doc);
+        pnpmWorkspaceDiagnostics.clearDiagnostics(doc);
+    });
 
-  // ── Register all disposables ──────────────────────────────────────────────
+    // ── Register all disposables ──────────────────────────────────────────────
 
-  context.subscriptions.push(
-    // .npmrc
-    npmrcHover,
-    npmrcCompletion,
-    npmrcDiagnostics,
-    // .yarnrc.yml
-    yarnrcHover,
-    yarnrcCompletion,
-    yarnrcDiagnostics,
-    // pnpm-workspace.yaml
-    pnpmWorkspaceHover,
-    pnpmWorkspaceCompletion,
-    pnpmWorkspaceDiagnostics,
-    // document events
-    onDidOpen,
-    onDidChange,
-    onDidClose,
-  );
+    context.subscriptions.push(
+        // .npmrc
+        npmrcHover,
+        npmrcCompletion,
+        npmrcDiagnostics,
+        // .yarnrc.yml
+        yarnrcHover,
+        yarnrcCompletion,
+        yarnrcDiagnostics,
+        // pnpm-workspace.yaml
+        pnpmWorkspaceHover,
+        pnpmWorkspaceCompletion,
+        pnpmWorkspaceDiagnostics,
+        // document events
+        onDidOpen,
+        onDidChange,
+        onDidClose
+    );
 }
 
 export function deactivate(): void {
-  console.log('[npmrc-helper] Extension deactivated');
+    console.log("[npmrc-helper] Extension deactivated");
 }

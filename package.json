@@ -1,122 +1,129 @@
 {
-  "name": "npmrc-helper",
-  "displayName": "npmrc Helper",
-  "description": "Hover docs, auto-completion, and diagnostics for .npmrc (npm & pnpm), pnpm-workspace.yaml (pnpm v11+), and .yarnrc.yml (Yarn Berry)",
-  "version": "0.2.1",
-  "publisher": "xlaoyu",
-  "engines": {
-    "vscode": "^1.85.0"
-  },
-  "categories": [
-    "Programming Languages",
-    "Snippets",
-    "Linters"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Yuliang-Lee/npmrc-helper"
-  },
-  "homepage": "https://github.com/Yuliang-Lee/npmrc-helper#readme",
-  "bugs": {
-    "url": "https://github.com/Yuliang-Lee/npmrc-helper/issues"
-  },
-  "license": "MIT",
-  "galleryBanner": {
-    "color": "#1e1e1e",
-    "theme": "dark"
-  },
-  "keywords": [
-    "npm",
-    "npmrc",
-    "pnpm",
-    "pnpm-workspace",
-    "yarn",
-    "yarnrc",
-    "config",
-    "hints",
-    "autocomplete"
-  ],
-  "icon": "images/icon.png",
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "languages": [
-      {
-        "id": "npmrc",
-        "aliases": [
-          "npmrc",
-          ".npmrc"
-        ],
-        "filenames": [
-          ".npmrc"
-        ],
-        "configuration": "./language-configuration.json"
-      },
-      {
-        "id": "yarnrc",
-        "aliases": [
-          "yarnrc",
-          ".yarnrc.yml"
-        ],
-        "filenames": [
-          ".yarnrc.yml",
-          ".yarnrc.yaml"
-        ],
-        "configuration": "./yarnrc-language-configuration.json"
-      },
-      {
-        "id": "pnpm-workspace",
-        "aliases": [
-          "pnpm-workspace",
-          "pnpm-workspace.yaml"
-        ],
-        "filenames": [
-          "pnpm-workspace.yaml",
-          "pnpm-workspace.yml"
-        ],
-        "configuration": "./yarnrc-language-configuration.json"
-      }
+    "name": "npmrc-helper",
+    "displayName": "npmrc Helper",
+    "version": "0.2.1",
+    "description": "Hover docs, auto-completion, and diagnostics for .npmrc (npm & pnpm), pnpm-workspace.yaml (pnpm v11+), and .yarnrc.yml (Yarn Berry)",
+    "categories": [
+        "Programming Languages",
+        "Snippets",
+        "Linters"
     ],
-    "grammars": [
-      {
-        "language": "npmrc",
-        "scopeName": "source.npmrc",
-        "path": "./syntaxes/npmrc.tmLanguage.json"
-      },
-      {
-        "language": "yarnrc",
-        "scopeName": "source.yarnrc",
-        "path": "./syntaxes/yarnrc.tmLanguage.json"
-      },
-      {
-        "language": "pnpm-workspace",
-        "scopeName": "source.pnpm-workspace",
-        "path": "./syntaxes/pnpm-workspace.tmLanguage.json"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "test": "node ./out/test/runTest.js",
-    "lint": "eslint src",
-    "package": "vsce package",
-    "publish": "vsce publish"
-  },
-  "devDependencies": {
-    "@types/glob": "^8.1.0",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.19.37",
-    "@types/vscode": "^1.85.0",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "^8.57.1",
-    "@vscode/test-electron": "^2.3.0",
-    "@vscode/vsce": "^3.9.2",
-    "eslint": "^10.0.3",
-    "glob": "^10.3.10",
-    "mocha": "^10.3.0",
-    "typescript": "^5.3.0"
-  }
+    "keywords": [
+        "npm",
+        "npmrc",
+        "pnpm",
+        "pnpm-workspace",
+        "yarn",
+        "yarnrc",
+        "config",
+        "hints",
+        "autocomplete"
+    ],
+    "homepage": "https://github.com/Yuliang-Lee/npmrc-helper#readme",
+    "bugs": {
+        "url": "https://github.com/Yuliang-Lee/npmrc-helper/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Yuliang-Lee/npmrc-helper"
+    },
+    "license": "MIT",
+    "publisher": "xlaoyu",
+    "main": "./out/extension.js",
+    "scripts": {
+        "fmt": "zsh scripts/fmt.sh",
+        "fmt:check": "zsh scripts/fmt.sh check",
+        "fmt:output": "zsh scripts/fmt.sh file-paths",
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "test": "node ./out/test/runTest.js",
+        "lint": "eslint src",
+        "package": "vsce package",
+        "publish": "vsce publish"
+    },
+    "contributes": {
+        "languages": [
+            {
+                "id": "npmrc",
+                "aliases": [
+                    "npmrc",
+                    ".npmrc"
+                ],
+                "filenames": [
+                    ".npmrc"
+                ],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "yarnrc",
+                "aliases": [
+                    "yarnrc",
+                    ".yarnrc.yml"
+                ],
+                "filenames": [
+                    ".yarnrc.yml",
+                    ".yarnrc.yaml"
+                ],
+                "configuration": "./yarnrc-language-configuration.json"
+            },
+            {
+                "id": "pnpm-workspace",
+                "aliases": [
+                    "pnpm-workspace",
+                    "pnpm-workspace.yaml"
+                ],
+                "filenames": [
+                    "pnpm-workspace.yaml",
+                    "pnpm-workspace.yml"
+                ],
+                "configuration": "./yarnrc-language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "npmrc",
+                "scopeName": "source.npmrc",
+                "path": "./syntaxes/npmrc.tmLanguage.json"
+            },
+            {
+                "language": "yarnrc",
+                "scopeName": "source.yarnrc",
+                "path": "./syntaxes/yarnrc.tmLanguage.json"
+            },
+            {
+                "language": "pnpm-workspace",
+                "scopeName": "source.pnpm-workspace",
+                "path": "./syntaxes/pnpm-workspace.tmLanguage.json"
+            }
+        ]
+    },
+    "activationEvents": [],
+    "dependencies": {
+        "@dev-md/ts-log": "latest",
+        "@npmcli/config": "^11.2.0"
+    },
+    "devDependencies": {
+        "@types/glob": "^8.1.0",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^20.19.37",
+        "@types/vscode": "^1.85.0",
+        "@typescript-eslint/eslint-plugin": "^8.57.1",
+        "@typescript-eslint/parser": "^8.57.1",
+        "@vscode/test-electron": "^2.3.0",
+        "@vscode/vsce": "^3.9.2",
+        "eslint": "^10.0.3",
+        "glob": "^10.3.10",
+        "mocha": "^10.3.0",
+        "typescript": "^5.3.0"
+    },
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "icon": "images/icon.png",
+    "galleryBanner": {
+        "color": "#1e1e1e",
+        "theme": "dark"
+    }
 }

@@ -496,7 +496,7 @@ This is a useful setting that can solve issues with long paths on Windows. If yo
 
 Or you can set the virtual store to `.pnpm` and add it to `.gitignore` . This will make stacktraces cleaner as paths to dependencies will be one directory higher.
 
-**NOTE:** the virtual store cannot be shared between several projects. Every project should have its own virtual store (except for in workspaces where the root is shared).
+**NOTE**: the virtual store cannot be shared between several projects. Every project should have its own virtual store (except for in workspaces where the root is shared).
 
 ### virtualStoreDirMaxLength
 

@@ -25,3 +25,5 @@ npm-debug.log*
 
 # Test output
 .vscode-test/
+
+.agents/

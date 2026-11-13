@@ -3,7 +3,6 @@
 .claude/**
 src/**
 out/test/**
-node_modules/**
 .gitignore
 .eslintrc.json
 eslint.config.mjs
@@ -11,4 +10,3 @@ tsconfig.json
 package-lock.json
 **/*.map
 **/*.ts
-!out/**

@@ -7,7 +7,7 @@
 
 A VSCode extension that provides **IntelliSense** for package manager configuration files — hover documentation, auto-completion, and diagnostics — supporting:
 
-- **`.npmrc`** — npm (v8 / v9 / v10 / v11) and pnpm (v10 / v11) **auth + registry only**
+- **`.npmrc`** — npm (bundled `@npmcli/config` definitions) and pnpm (v10 / v11) **auth + registry only**
 - **`pnpm-workspace.yaml`** — pnpm v11+ everything else (camelCase keys, catalogs, overrides, workspace fields, per-subproject `packageConfigs`)
 - **`.yarnrc.yml`** — Yarn Berry (v2 / v3 / v4)
 
@@ -31,29 +31,34 @@ Hover over any config key to see a rich popup with:
 ### ✅ Auto-completion
 
 **`.npmrc`**
+
 - **Key completion**: Start typing to get suggestions filtered to the active package manager (npm or pnpm, auto-detected)
 - **Value completion**: After `key=`, suggestions for keys with a fixed set of valid values (e.g. `loglevel`, `access`, `audit-level`)
 - Deprecated and removed keys appear at the bottom with a strikethrough
 
 **`pnpm-workspace.yaml`**
+
 - **Key completion**: All workspace fields (`packages`, `catalog`, `overrides`, `packageConfigs`, `allowBuilds`, …) plus all pnpm settings in **camelCase** (`nodeLinker`, `hoistPattern`, `autoInstallPeers`, `saveExact`, …)
-- **Value completion**: After `key: `, suggestions for keys with a fixed set of valid values (e.g. `nodeLinker`, `packageImportMethod`, `resolutionMode`)
+- **Value completion**: After `key:`, suggestions for keys with a fixed set of valid values (e.g. `nodeLinker`, `packageImportMethod`, `resolutionMode`)
 
 **`.yarnrc.yml`**
+
 - **Key completion**: All Yarn Berry configuration keys with docs
-- **Value completion**: After `key: `, suggestions for enum-type keys (e.g. `nodeLinker`, `pnpMode`, `cacheMigrationMode`)
+- **Value completion**: After `key:`, suggestions for enum-type keys (e.g. `nodeLinker`, `pnpMode`, `cacheMigrationMode`)
 
 ### ⚠️ Diagnostics
 
 **`.npmrc`**
+
 - Unknown config keys → warning squiggle
-- Keys removed in newer npm versions (e.g. `node-version`, `ci-name`) → warning + strikethrough
-- Deprecated keys (e.g. `production`, `shrinkwrap`) → hint + strikethrough
+- Keys absent from the bundled npm definitions → unknown-key warning
+- Deprecated keys (e.g. `production`, `cache-max`) → hint + strikethrough
 - Values that don't match the allowed set → warning
 - Lines missing `=` → warning
 - Scoped entries (`@scope:registry=…`, `//host/:_authToken=…`) are correctly skipped
 
 **`pnpm-workspace.yaml`**
+
 - Unknown top-level keys → warning squiggle
 - **Migration hints**: kebab-case keys (e.g. `node-linker`) are flagged with the camelCase replacement (`nodeLinker`)
 - **`allowBuilds` migration**: `onlyBuiltDependencies`, `neverBuiltDependencies`, `ignoredBuiltDependencies`, `onlyBuiltDependenciesFile` are flagged with a hint to use `allowBuilds: { <pkg>: true | false }`
@@ -62,6 +67,7 @@ Hover over any config key to see a rich popup with:
 - Nested keys (e.g. `catalog` entries) are skipped — only top-level keys are validated
 
 **`.yarnrc.yml`**
+
 - Unknown config keys → warning squiggle
 - Deprecated keys → hint + strikethrough
 - Invalid enum values → warning
@@ -82,22 +88,20 @@ Hover documentation, camelCase key completion, enum value suggestions, and migra
 
 ## Supported Configurations
 
-### npm (v8 – v11)
+### npm
 
-All keys from the [npm config documentation](https://docs.npmjs.com/cli/v11/using-npm/config) across versions v8, v9, v10, and v11, including:
+Keys, defaults, type descriptions, documentation, deprecations, and enum values are derived from the bundled `@npmcli/config` definitions. Updating that dependency updates the catalog automatically; it does not inspect the user's installed npm version. Some definitions are command-specific or CLI-only, as noted in their hover documentation.
 
 | Key | Type | Default | Notes |
-|-----|------|---------|-------|
+| ----- | ------ | --------- | ------- |
 | `registry` | URL | `https://registry.npmjs.org/` | |
 | `loglevel` | String | `notice` | |
 | `audit-level` | String | `null` | |
 | `install-strategy` | String | `hoisted` | Added in v10 |
 | `sbom-format` | String | `null` | Added in v10 |
 | `omit` | String | — | Added in v9 |
-| `node-version` | semver | — | ⚠️ Removed in v9 |
-| `ci-name` | String | — | ⚠️ Removed in v10 |
 | `production` | Boolean | — | ⚠️ Deprecated → use `--omit=dev` |
-| `shrinkwrap` | Boolean | — | ⚠️ Deprecated → use `--package-lock` |
+| `cache-max` | Number | `Infinity` | ⚠️ Deprecated → use `--prefer-online` |
 | … | … | … | |
 
 ### pnpm (v10 / v11)
@@ -110,7 +114,7 @@ pnpm reads two files:
 #### Workspace-only fields
 
 | Key | Type | Notes |
-|-----|------|-------|
+| ----- | ------ | ------- |
 | `packages` | String[] | Workspace package globs |
 | `catalog` / `catalogs` | Object | Versioned catalogs (pnpm v9+) |
 | `overrides` | Object | Force resolutions of any dep |
@@ -125,7 +129,7 @@ pnpm reads two files:
 #### Selected camelCase settings (formerly kebab-case in `.npmrc`)
 
 | Key | Type | Default | Notes |
-|-----|------|---------|-------|
+| ----- | ------ | --------- | ------- |
 | `nodeLinker` | String | `isolated` | `isolated` / `hoisted` / `pnp` |
 | `hoistPattern` / `publicHoistPattern` | String[] | — | |
 | `shamefullyHoist` | Boolean | `false` | |
@@ -175,7 +179,7 @@ registry=https://registry.npmjs.org/
 All keys from the [Yarn Berry yarnrc.yml docs](https://yarnpkg.com/configuration/yarnrc), including:
 
 | Key | Type | Default | npm equivalent |
-|-----|------|---------|---------------|
+| ----- | ------ | --------- | --------------- |
 | `npmRegistryServer` | String | `https://registry.yarnpkg.com` | `registry` |
 | `npmAuthToken` | String | — | `_authToken` |
 | `nodeLinker` | String | `pnp` | — |
@@ -209,6 +213,14 @@ npm run lint           # run ESLint
 npm run package        # produce npmrc-helper-x.x.x.vsix
 ```
 
+### Maintaining npm configuration support
+
+`src/npmrcData.ts` adapts upstream definitions to the string-based documentation interface used by the providers. Raw defaults and nopt constructors are not passed to Markdown rendering. Full descriptions and code examples are preserved; only display formatting and relative documentation links are normalized.
+
+Only extension-specific package-manager support, existing version badges, and notes live in `npmConfigMetadata`. Its keyed object is checked against `NpmConfigKey`, so IntelliSense excludes keys already present and unknown keys are rejected. New upstream definitions need no local entry. Boolean and closed-enum values support completion and diagnostics; free-form strings, paths, numbers, and host-local IP addresses are not restricted to an enum list.
+
+No generated declaration in `node_modules` is required. The compiler/IntelliSense regression tests explicitly hide the local `definition.d.ts` helper file. Production dependencies must remain included in the VSIX because the catalog is read at runtime.
+
 ### Install from VSIX
 
 ```
@@ -220,7 +232,7 @@ Extensions panel → ··· → Install from VSIX…
 ## Requirements
 
 - VSCode `^1.85.0`
-- Node.js `^20`
+- For development, a Node.js version supported by `@npmcli/config` (currently `^22.22.2 || ^24.15.0 || >=26.0.0`)
 
 ## Extension Settings
 
