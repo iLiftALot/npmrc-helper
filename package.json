@@ -40,7 +40,9 @@
         "pretest": "npm run compile && npm run lint",
         "test": "node ./out/test/runTest.js",
         "lint": "eslint src",
+        "load": "code --install-extension npmrc-helper-0.2.1-local.vsix --force",
         "package": "vsce package",
+        "package:local": "vsce package -o npmrc-helper-0.2.1-local.vsix && npmR load",
         "publish": "vsce publish"
     },
     "contributes": {

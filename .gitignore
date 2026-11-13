@@ -27,3 +27,4 @@ npm-debug.log*
 .vscode-test/
 
 .agents/
+notes.md
