@@ -100,30 +100,38 @@
         ]
     },
     "activationEvents": [],
+    "overrides": {
+        "glob": "$glob",
+        "minimatch@>=7.0.0 <11.0.1": "^11.0.8"
+    },
     "dependencies": {
         "@dev-md/ts-log": "latest",
         "@npmcli/config": "^11.2.0"
     },
     "devDependencies": {
-        "@types/glob": "^8.1.0",
         "@types/mocha": "^10.0.6",
-        "@types/node": "^20.19.37",
-        "@types/vscode": "^1.85.0",
+        "@types/node": "^20.19.43",
+        "@types/vscode": "^1.146.0",
         "@typescript-eslint/eslint-plugin": "^8.57.1",
         "@typescript-eslint/parser": "^8.57.1",
-        "@vscode/test-electron": "^2.3.0",
-        "@vscode/vsce": "^3.9.2",
+        "@vscode/test-electron": "^3.1.0",
+        "@vscode/vsce": "^4.1.1",
         "eslint": "^10.0.3",
-        "glob": "^10.3.10",
-        "mocha": "^10.3.0",
+        "glob": "^14.0.6",
+        "mocha": "^12.0.3",
         "typescript": "^5.3.0"
     },
     "engines": {
-        "vscode": "^1.85.0"
+        "vscode": "^1.146.0"
     },
     "icon": "images/icon.png",
     "galleryBanner": {
         "color": "#1e1e1e",
         "theme": "dark"
+    },
+    "allowScripts": {
+        "@vscode/vsce-sign@2.1.1": true,
+        "fsevents@2.3.3": true,
+        "keytar@7.9.0": true
     }
 }

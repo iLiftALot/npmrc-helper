@@ -10,3 +10,6 @@ tsconfig.json
 package-lock.json
 **/*.map
 **/*.ts
+.agents/**
+.fallow
+dprint.jsonc
